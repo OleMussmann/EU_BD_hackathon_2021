@@ -4,7 +4,7 @@ library(data.table)
 library(fst)
 library(igraph)
 library(countrycode)
-
+library(networkD3)
 
 dir_itgs <- "../../itgs"
 
@@ -34,6 +34,8 @@ itgs[, origin_eu := ifelse(origin %in% codes_eu, origin,
   countrycode(origin, origin="iso2c", destination = 'continent'))]
 itgs[, destin_eu := ifelse(destin %in% codes_eu, destin, 
   countrycode(destin, origin="iso2c", destination = 'continent'))]
+itgs[, consign_eu := ifelse(consign %in% codes_eu, consign, 
+  countrycode(consign, origin="iso2c", destination = 'continent'))]
 
 
 coords <- as.matrix(centroids[, c("x", "y")])
@@ -44,8 +46,10 @@ coords[,1] <- coords[,1]/m
 coords[,2] <- coords[,2]/m
 
 goods <- unique(itgs$hs6)
+noneu <- c("Asia", "Americas", "Africa", "Europe", "Oceania")
 countries <- unique(itgs$origin_eu)
 countries <- c("<ALL>", countries)
+countries <- setdiff(countries, noneu)
 
 
 
@@ -68,12 +72,14 @@ ui <- fluidPage(
       selectizeInput("product", "Good/service", choices = NULL, 
         selected = NULL, multiple = FALSE, options = NULL),
       selectizeInput("country", "Country", choices = countries, 
-        selected = NULL, multiple = TRUE, options = NULL)
+        selected = NULL, multiple = TRUE, options = NULL),
+      actionButton("update", "Update"),
     ),
 
     # Show a plot of the generated distribution
     mainPanel(
-       plotOutput("network", height = "800px")
+      plotOutput("network", height = "800px"),
+      sankeyNetworkOutput("alluvial", height = "800px")
     )
   )
 )
@@ -90,21 +96,54 @@ ui <- fluidPage(
 server <- function(input, output, session) {
   
   updateSelectizeInput(session, 'product', choices = goods, server = TRUE)
-    
-  network <- reactive({
-    # Filter itgs data based in product and selected countries
-    product <- input$product
-    tot <- itgs[hs6 == product, .(weight = sum(obs_value)), by = .(origin_eu, destin_eu)]
-    if (!is.null(input$country) && !("<ALL>" %in% input$country)) {
-      country <- input$country
-      tot <- tot[((origin_eu %in% country) | (destin_eu %in% country))]
-    }
-    tot <- tot[complete.cases(tot)]
-    setnames(tot, c("src", "dst", "weight"))
-    tot <- tot[!(tot$src %in% c("Asia", "Americas", "Africa", "Europe", "Oceania")) |
-      !(tot$dst %in% c("Asia", "Americas", "Africa", "Europe", "Oceania")), ]
-    tot
+  
+  filter_country <- reactive({
+    countries <- input$country
+    sel <- if (is.null(countries) | "<ALL>" %in% countries) TRUE else 
+      itgs$origin_eu %in% countries | itgs$consign_eu %in% countries |
+      itgs$destin_eu %in% countries
+    flow <- itgs[sel == TRUE]
+    # Remove flow between non eu
+    noneu <- c("Asia", "Americas", "Africa", "Europe", "Oceania")
+    flow <- flow[!(origin_eu %in% noneu & consign_eu %in% noneu & 
+        destin_eu %in% noneu)]
+    flow
   })
+  
+  # filter_product <- reactive({
+  #   flow <- filter_country()
+  #   product <- input$product
+  #   if (is.null(product)) {
+  #     flow[, .(value = sum(obs_value)),
+  #       by = .(origin_eu, consign_eu, destin_eu)]
+  #   } else {
+  #     flow[hs6 == product, .(value = sum(obs_value)),
+  #       by = .(origin_eu, consign_eu, destin_eu)]
+  #   }
+  # })
+  
+  filter_product <- eventReactive(input$update, {
+    flow <- filter_country()
+    product <- input$product
+    if (is.null(product)) {
+      flow[, .(value = sum(obs_value)),
+        by = .(origin_eu, consign_eu, destin_eu)]
+    } else {
+      flow[hs6 == product, .(value = sum(obs_value)),
+        by = .(origin_eu, consign_eu, destin_eu)]
+    }
+  })
+  
+  network <- reactive({
+    flow <- filter_product()
+    flow <- flow[, .(weight = sum(value)), by = .(origin_eu, destin_eu)]
+    flow <- flow[complete.cases(flow)]
+    setnames(flow, c("src", "dst", "weight"))
+    flow <- flow[!(src %in% noneu | dst %in% noneu)]
+    flow
+  })
+  
+  
   
   output$network <- renderPlot({
     # Plot network
@@ -119,6 +158,36 @@ server <- function(input, output, session) {
       vertex.label.color = "magenta", vertex.color = "lightblue",
       edge.curved = TRUE)
   })
+  
+  output$alluvial <- renderSankeyNetwork({
+    flow <- filter_product()
+    print(flow)
+    # Filter out small flows
+    flow <- flow[order(-value)]
+    flow <- flow[(cumsum(value)/sum(value)) < 0.8]
+    # Build network for alluvial diagram
+    nodes <- data.table(
+      id = c(unique(paste0(flow$destin_eu, "_d")),
+        unique(paste0(flow$consign_eu, "_c")),
+        unique(flow$origin_eu)), stringsAsFactors = FALSE)
+    links <- rbind(flow[, .(
+      src = origin_eu,
+      dst = paste0(consign_eu, "_c"),
+      value = value,
+      group = origin_eu)],
+      flow[, .(
+      src = paste0(consign_eu, "_c"),
+      dst = paste0(destin_eu, "_d"),
+      value = value,
+      group = origin_eu)])
+    links <- links[, .(value = sum(value)), by = .(src, dst, group)]
+    nodes <- nodes[id %in% links$src | id %in% links$dst]
+    links[, src := match(src, nodes$id)-1L]
+    links[, dst := match(dst, nodes$id)-1L]
+    sankeyNetwork(links, Source = "src", Target = "dst", Value = "value",
+      Nodes = nodes, NodeID = "id", LinkGroup = "group")
+  })
+
 }
 
 

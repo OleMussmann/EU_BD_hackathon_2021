@@ -88,35 +88,52 @@ itgs[, consign_eu := ifelse(consign %in% codes_eu, consign,
 
 library(networkD3)
 
-?sankeyNetwork
-
-flow <- itgs[, .(value = sum(obs_value)), by = .(origin_eu, consign_eu, destin_eu)]
-
-flow <- itgs[hs6 == 10110, .(value = sum(obs_value)), by = .(origin_eu, destin_eu)]
-
-nodes <- data.frame(id = c(unique(paste0(flow$destin_eu, "_d")), unique(flow$origin_eu)), stringsAsFactors = FALSE)
-links <- flow
-links[, origin_eu := match(origin_eu, nodes$id)-1L]
-links[, destin_eu := match(paste0(destin_eu, "_d"), nodes$id)-1L]
-
-sankeyNetwork(links, Source = "origin_eu", Target = "destin_eu", Value = "value", 
-  Nodes = nodes, NodeID = "id")
+# ?sankeyNetwork
+# 
+# flow <- itgs[, .(value = sum(obs_value)), by = .(origin_eu, consign_eu, destin_eu)]
+# 
+# flow <- itgs[hs6 == 10110, .(value = sum(obs_value)), by = .(origin_eu, destin_eu)]
+# 
+# nodes <- data.frame(id = c(unique(paste0(flow$destin_eu, "_d")), unique(flow$origin_eu)), stringsAsFactors = FALSE)
+# links <- flow
+# links[, origin_eu := match(origin_eu, nodes$id)-1L]
+# links[, destin_eu := match(paste0(destin_eu, "_d"), nodes$id)-1L]
+# 
+# sankeyNetwork(links, Source = "origin_eu", Target = "destin_eu", Value = "value", 
+#   Nodes = nodes, NodeID = "id")
 
 
 flow <- itgs[hs6 == 10110, .(value = sum(obs_value)), by = .(origin_eu, consign_eu, destin_eu)]
 
-nodes <- data.frame(id = c(unique(paste0(flow$destin_eu, "_d")), unique(paste0(flow$consign_eu, "_c")), unique(flow$origin_eu)), stringsAsFactors = FALSE)
+# Remove flow between non eu
+noneu <- c("Asia", "Americas", "Africa", "Europe", "Oceania")
+flow <- flow[!(origin_eu %in% noneu & consign_eu %in% noneu & destin_eu %in% noneu)]
+
+nodes <- data.table(
+  id = c(unique(paste0(flow$destin_eu, "_d")), 
+    unique(paste0(flow$consign_eu, "_c")), 
+    unique(flow$origin_eu)), stringsAsFactors = FALSE)
 
 links <- rbind(flow[, .(
-  src = match(origin_eu, nodes$id)-1L, 
-  dst = match(paste0(consign_eu, "_c"), nodes$id)-1L,
+  src = origin_eu,
+  dst = paste0(consign_eu, "_c"),
   value = value,
   group = origin_eu)],
   flow[, .(
-  src = match(paste0(consign_eu, "_c"), nodes$id)-1L, 
-  dst = match(paste0(destin_eu, "_d"), nodes$id)-1L,
+  src = paste0(consign_eu, "_c"), 
+  dst = paste0(destin_eu, "_d"),
   value = value,
   group = origin_eu)])
+
+links <- links[, .(value = sum(value)), by = .(src, dst, group)]
+
+# Filter out small flows
+links <- links[order(-value)]
+links <- links[(cumsum(value)/sum(value)) < 0.9]
+
+nodes <- nodes[id %in% links$src | id %in% links$dst]
+links[, src := match(src, nodes$id)-1L]
+links[, dst := match(dst, nodes$id)-1L]
 
 sankeyNetwork(links, Source = "src", Target = "dst", Value = "value", 
   Nodes = nodes, NodeID = "id", LinkGroup = "group")

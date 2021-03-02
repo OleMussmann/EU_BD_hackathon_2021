@@ -102,12 +102,21 @@ library(networkD3)
 # sankeyNetwork(links, Source = "origin_eu", Target = "destin_eu", Value = "value", 
 #   Nodes = nodes, NodeID = "id")
 
+countries <- c("NL", "BE")
 
-flow <- itgs[hs6 == 10110, .(value = sum(obs_value)), by = .(origin_eu, consign_eu, destin_eu)]
+sel <- if (is.null(countries)) TRUE else itgs$origin_eu %in% countries | 
+  itgs$consign_eu %in% countries |
+  itgs$destin_eu %in% countries
+flow <- itgs[sel == TRUE, .(value = sum(obs_value)), by = .(origin_eu, consign_eu, destin_eu)]
 
 # Remove flow between non eu
 noneu <- c("Asia", "Americas", "Africa", "Europe", "Oceania")
 flow <- flow[!(origin_eu %in% noneu & consign_eu %in% noneu & destin_eu %in% noneu)]
+
+# Filter out small flows
+flow <- flow[order(-value)]
+flow <- flow[(cumsum(value)/sum(value)) < 0.7]
+
 
 nodes <- data.table(
   id = c(unique(paste0(flow$destin_eu, "_d")), 
@@ -128,8 +137,8 @@ links <- rbind(flow[, .(
 links <- links[, .(value = sum(value)), by = .(src, dst, group)]
 
 # Filter out small flows
-links <- links[order(-value)]
-links <- links[(cumsum(value)/sum(value)) < 0.9]
+# links <- links[order(-value)]
+# links <- links[(cumsum(value)/sum(value)) < 0.8]
 
 nodes <- nodes[id %in% links$src | id %in% links$dst]
 links[, src := match(src, nodes$id)-1L]

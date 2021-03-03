@@ -5,6 +5,7 @@ library(fst)
 library(igraph)
 library(countrycode)
 library(networkD3)
+library(sf)
 
 dir_itgs <- "../../itgs"
 
@@ -39,11 +40,11 @@ itgs[, consign_eu := ifelse(consign %in% codes_eu, consign,
 
 
 coords <- as.matrix(centroids[, c("x", "y")])
-coords[,1] <- coords[,1] - min(coords[,1])
-coords[,2] <- coords[,2] - min(coords[,2])
-m <- max(coords)
-coords[,1] <- coords[,1]/m
-coords[,2] <- coords[,2]/m
+# coords[,1] <- coords[,1] - min(coords[,1])
+# coords[,2] <- coords[,2] - min(coords[,2])
+# m <- max(coords)
+# coords[,1] <- coords[,1]/m
+# coords[,2] <- coords[,2]/m
 
 goods <- unique(itgs$hs6)
 noneu <- c("Asia", "Americas", "Africa", "Europe", "Oceania")
@@ -52,6 +53,8 @@ countries <- c("<ALL>", countries)
 countries <- setdiff(countries, noneu)
 
 
+#Read map of europe
+map <- st_read("../hulpdata/geo_europa/europe_nuts0.geojson")
 
 
 
@@ -105,8 +108,8 @@ server <- function(input, output, session) {
     flow <- itgs[sel == TRUE]
     # Remove flow between non eu
     noneu <- c("Asia", "Americas", "Africa", "Europe", "Oceania")
-    flow <- flow[!(origin_eu %in% noneu & consign_eu %in% noneu & 
-        destin_eu %in% noneu)]
+    flow <- flow[!((origin_eu %in% noneu) & (consign_eu %in% noneu) & 
+        (destin_eu %in% noneu))]
     flow
   })
   
@@ -139,7 +142,7 @@ server <- function(input, output, session) {
     flow <- flow[, .(weight = sum(value)), by = .(origin_eu, destin_eu)]
     flow <- flow[complete.cases(flow)]
     setnames(flow, c("src", "dst", "weight"))
-    flow <- flow[!(src %in% noneu | dst %in% noneu)]
+    flow <- flow[!(src %in% noneu) & (dst %in% noneu)]
     flow
   })
   
@@ -152,6 +155,7 @@ server <- function(input, output, session) {
     par(mar = c(0,0,0,0), bg = "#555555")
     plot(centroids$x, centroids$y, asp = 1, type = 'n', xlab = "", ylab = "", 
       xaxt = 'n', yaxt = 'n', bty = 'n')
+    plot(map$geometry, add = TRUE, border = "darkgray", col = "black")
     plot(g, coords = coords, rescale = FALSE, 
       add = TRUE, edge.width = 25*(E(g)$weight/max(E(g)$weight)), 
       edge.color = "#FFFFFF50", edge.arrow.size = 0.2,
@@ -195,6 +199,5 @@ server <- function(input, output, session) {
 
 
 # RUN APP -----------------------------------------------------------------
-
 
 shinyApp(ui = ui, server = server)

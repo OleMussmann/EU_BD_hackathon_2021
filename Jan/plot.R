@@ -51,6 +51,8 @@ tot <- tot[!(tot$src %in% c("Asia", "Americas", "Africa", "Europe", "Oceania")) 
   !(tot$dst %in% c("Asia", "Americas", "Africa", "Europe", "Oceania")) ,]
   
 
+library(sf)
+map <- st_read("../hulpdata/geo_europa/europe_nuts0.geojson")
 
 
 g <- graph_from_data_frame(tot, directed = TRUE, vertices = centroids)
@@ -66,11 +68,13 @@ coords[,2] <- coords[,2]/m
 par(mar = c(0,0,0,0), bg = "#555555")
 plot(centroids$x, centroids$y, asp = 1, type = 'n', xlab = "", ylab = "", 
   xaxt = 'n', yaxt = 'n', bty = 'n')
+plot(map$geometry, add = TRUE, border="gray", col = "black")
 plot(g, coords = coords, rescale = FALSE, 
   add = TRUE, edge.width = 25*(E(g)$weight/max(E(g)$weight)), 
   edge.color = "#FFFFFF50", edge.arrow.size = 0.2,
   vertex.label.color = "magenta", vertex.color = "lightblue",
   edge.curved = TRUE)
+
 
 
 head(tot)

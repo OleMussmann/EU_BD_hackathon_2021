@@ -126,7 +126,8 @@ m <- match(as.integer(rownames(w_import)), as.integer(gsub(".", "", fixed = TRUE
 # Assign each product to a dimension
 product_group_import <- apply(w_import, 1, which.max)
 product_group_export <- apply(w_export, 1, which.max)
-labels$Description[m[product_group_export == 5]]
+
+labels$Description[m[product_group_export == 1]]
 
 table(product_group_export, product_group_import)
 

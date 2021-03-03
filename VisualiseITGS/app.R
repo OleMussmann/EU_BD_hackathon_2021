@@ -111,26 +111,31 @@ ui <- navbarPage("ITGS",
   #     plotOutput("export_weights", height = "800px")
   #   )
   # ),
-  tabPanel("Import classification",
+  tabPanel("Import and export classification",
     fluidPage(
-      titlePanel("Import classification"),
-      fillCol(
+      titlePanel("Import and export classification"),
+      fillRow(
+        h2("Import patterns"),
+        h2("Export patterns"),
+        height = "100px"
+      ),
       fillRow(
         plotOutput("import_w", height = "800px"),
         plotOutput("export_w", height = "800px"),
         height = "900px"
       ),
       fillRow(
-      selectizeInput("country_import", "Select countries", choices = countries, 
-        selected = NULL, multiple = TRUE, options = NULL),
+        h2("Importance of import patterns for countries"),
+        h2("Importance of export patterns for countries"),
         height = "100px"
       ),
+      selectizeInput("country_import", "Select countries", choices = countries, 
+        selected = NULL, multiple = TRUE, options = NULL),
       fillRow(
         plotOutput("import_weights", height = "800px"),
         plotOutput("export_weights", height = "800px"),
         height = "900px"
-        
-      ))
+      )
     )
   )
 )

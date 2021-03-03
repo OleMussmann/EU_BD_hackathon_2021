@@ -6,6 +6,7 @@ library(igraph)
 library(countrycode)
 library(networkD3)
 library(sf)
+library(ggplot2)
 
 dir_itgs <- "../../itgs"
 
@@ -52,40 +53,119 @@ countries <- unique(itgs$origin_eu)
 countries <- c("<ALL>", countries)
 countries <- setdiff(countries, noneu)
 
-
 #Read map of europe
 map <- st_read("../hulpdata/geo_europa/europe_nuts0.geojson")
 
+
+# Read data for export classification
+export <- list()
+export[["w"]] <- fread("../Jan/output/w_export_sum_2011.csv")
+export[["weights"]] <- fread("../Jan/output/weights_export_2011.csv")
+export[["weights"]][, sweight := weight/mean(abs(weight)), by = .(country, year)]
+export[["weights"]][sweight < 0, sweight := 0]
+# And for import classification
+import <- list()
+import[["w"]] <- fread("../Jan/output/w_import_sum_2011.csv")
+import[["weights"]] <- fread("../Jan/output/weights_import_2011.csv")
+import[["weights"]][, sweight := weight/mean(abs(weight)), by = .(country, year)]
+import[["weights"]][sweight < 0, sweight := 0]
 
 
 # UI ----------------------------------------------------------------------
 
 
-ui <- fluidPage(
+ui <- navbarPage("ITGS", 
+  tabPanel("Flows", 
+    fluidPage(
 
-  titlePanel("ITGS"),
-
-  # Sidebar with a slider input for number of bins 
-  sidebarLayout(
-    sidebarPanel(
-      # Client side filtering in selectize
-      #selectizeInput("product", "Good/service", choices = goods, 
-      #  selected = NULL, multiple = FALSE, options = NULL),
-      # Server side filtering in selectize
-      selectizeInput("product", "Good/service", choices = NULL, 
-        selected = NULL, multiple = FALSE, options = NULL),
-      selectizeInput("country", "Country", choices = countries, 
+      titlePanel("ITGS"),
+    
+      # Sidebar with a slider input for number of bins 
+      sidebarLayout(
+        sidebarPanel(
+          # Client side filtering in selectize
+          #selectizeInput("product", "Good/service", choices = goods, 
+          #  selected = NULL, multiple = FALSE, options = NULL),
+          # Server side filtering in selectize
+          selectizeInput("product", "Good/service", choices = NULL, 
+            selected = NULL, multiple = FALSE, options = NULL),
+          selectizeInput("country", "Country", choices = countries, 
+            selected = NULL, multiple = TRUE, options = NULL),
+          actionButton("update", "Update"),
+        ),
+    
+        # Show a plot of the generated distribution
+        mainPanel(
+          plotOutput("network", height = "800px"),
+          sankeyNetworkOutput("alluvial", height = "800px")
+        )
+      )
+    )
+  ),
+  # tabPanel("Export classification",
+  #   fluidPage(
+  #     titlePanel("Export classification"),
+  #     selectizeInput("country_export", "Country", choices = countries, 
+  #       selected = NULL, multiple = TRUE, options = NULL),
+  #     plotOutput("export_w", height = "800px"),
+  #     plotOutput("export_weights", height = "800px")
+  #   )
+  # ),
+  tabPanel("Import classification",
+    fluidPage(
+      titlePanel("Import classification"),
+      fillCol(
+      fillRow(
+        plotOutput("import_w", height = "800px"),
+        plotOutput("export_w", height = "800px"),
+        height = "900px"
+      ),
+      fillRow(
+      selectizeInput("country_import", "Select countries", choices = countries, 
         selected = NULL, multiple = TRUE, options = NULL),
-      actionButton("update", "Update"),
-    ),
-
-    # Show a plot of the generated distribution
-    mainPanel(
-      plotOutput("network", height = "800px"),
-      sankeyNetworkOutput("alluvial", height = "800px")
+        height = "100px"
+      ),
+      fillRow(
+        plotOutput("import_weights", height = "800px"),
+        plotOutput("export_weights", height = "800px"),
+        height = "900px"
+        
+      ))
     )
   )
 )
+  
+
+
+
+
+
+# 
+# ui <- fluidPage(
+# 
+#   titlePanel("ITGS"),
+# 
+#   # Sidebar with a slider input for number of bins 
+#   sidebarLayout(
+#     sidebarPanel(
+#       # Client side filtering in selectize
+#       #selectizeInput("product", "Good/service", choices = goods, 
+#       #  selected = NULL, multiple = FALSE, options = NULL),
+#       # Server side filtering in selectize
+#       selectizeInput("product", "Good/service", choices = NULL, 
+#         selected = NULL, multiple = FALSE, options = NULL),
+#       selectizeInput("country", "Country", choices = countries, 
+#         selected = NULL, multiple = TRUE, options = NULL),
+#       actionButton("update", "Update"),
+#     ),
+# 
+#     # Show a plot of the generated distribution
+#     mainPanel(
+#       plotOutput("network", height = "800px"),
+#       sankeyNetworkOutput("alluvial", height = "800px")
+#     )
+#   )
+# )
 
 
 
@@ -191,7 +271,40 @@ server <- function(input, output, session) {
     sankeyNetwork(links, Source = "src", Target = "dst", Value = "value",
       Nodes = nodes, NodeID = "id", LinkGroup = "group")
   })
-
+  
+  
+  output$export_w <- renderPlot({
+    ggplot(export[["w"]], aes(x = sitc2_label, y = score, fill=factor(dimension))) + 
+      geom_bar(stat = "identity") +
+      facet_grid(1 ~ dimension) +
+      coord_flip() + xlab("SITC") + ylab("Score")
+  })
+  
+  output$export_weights <- renderPlot({
+    countries <- input$country_import
+    sel <- if (is.null(countries) | "<ALL>" %in% countries) TRUE else 
+      export$weights$country %in% countries
+    ggplot(export[["weights"]][sel], aes(x= year, y = sweight, colour = factor(dimension))) + 
+      geom_line() + facet_wrap(~ country) +
+      labs(x = "Year", y = "Importance of dimensions", color = "Dimension") 
+  })
+  
+  output$import_w <- renderPlot({
+    ggplot(import[["w"]], aes(x = sitc2_label, y = score, fill=factor(dimension))) + 
+      geom_bar(stat = "identity") +
+      facet_grid(1 ~ dimension) +
+      coord_flip() + xlab("SITC") + ylab("Score")
+  })
+  
+  output$import_weights <- renderPlot({
+    countries <- input$country_import
+    sel <- if (is.null(countries) | "<ALL>" %in% countries) TRUE else 
+      import$weights$country %in% countries
+    ggplot(import[["weights"]][sel], aes(x= year, y = sweight,
+        colour = factor(dimension))) + 
+      geom_line() + facet_wrap(~ country) +
+      labs(x = "Year", y = "Importance of dimensions", color = "Dimension") 
+  })
 }
 
 

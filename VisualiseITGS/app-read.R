@@ -10,11 +10,16 @@ library(fst)
 library(ggplot2)
 library(shinyWidgets)
 
-load("years.Rdata")
-load("centroids.Rdata")
-load("coords.Rdata")
-load("unique_countries.Rdata")
-load("unique_goods.Rdata")
+
+dir_data <- "data_sample"
+
+
+load(file.path(dir_data, "years.Rdata"))
+load(file.path(dir_data, "centroids.Rdata"))
+load(file.path(dir_data, "coords.Rdata"))
+load(file.path(dir_data, "unique_countries.Rdata"))
+load(file.path(dir_data, "unique_goods.Rdata"))
+years <- tail(years, 3)
 
 #load("unique_goods.Rdata")
 goods <- unique_goods
@@ -36,8 +41,9 @@ itgs_list <- vector(mode="list", length=length(years))
 names(itgs_list) <- years
 
 for (year in years) {
-  load(paste("itgs_", year, ".Rdata", sep=""))
-  itgs_list[[year]] <- itgs
+  message("Reading ", year)
+  load(paste(dir_data, "/itgs_", year, ".Rdata", sep=""))
+  itgs_list[[year]] <- itgs[, .(time_period, hs6, origin_eu, consign_eu, destin_eu, obs_value)]
 }
 
 #itgs <- ("../../itgs_2018.feather")
@@ -68,9 +74,8 @@ import[["weights"]][sweight < 0, sweight := 0]
 comext_2010 <- fread("../../comext/Comext_mnd_aggregatie_2010.csv")
 comext_2010
 comext_2010[, hs6 := as.numeric(substr(PRODUCT_NC, 1, 6))]
-    comext_2010 <- comext_2010[complete.cases(comext_2010)]
-     
-    comext_2010[, FLOW := factor(FLOW, 1:2, labels = c("Import", "Export"))]
+comext_2010 <- comext_2010[complete.cases(comext_2010)]
+comext_2010[, FLOW := factor(FLOW, 1:2, labels = c("Import", "Export"))]
 
 # Read ITGS
 # dir_itgs <- "~/data"
@@ -95,11 +100,11 @@ comext_2010[, hs6 := as.numeric(substr(PRODUCT_NC, 1, 6))]
 # UI ----------------------------------------------------------------------
 
 
-ui <- navbarPage("ITGS", 
+ui <- navbarPage("EU Trade Explorer", 
    tabPanel("Flows", 
     fluidPage(
       
-      titlePanel("ITGS"),
+      titlePanel("EU Trade"),
       
       # Sidebar with a slider input for number of bins 
       sidebarLayout(
@@ -233,7 +238,7 @@ server <- function(input, output, session) {
     flow <- flow[, .(weight = sum(value)), by = .(origin_eu, destin_eu)]
     flow <- flow[complete.cases(flow)]
     setnames(flow, c("src", "dst", "weight"))
-    flow <- flow[!(src %in% noneu | dst %in% noneu)]
+    #flow <- flow[!(src %in% noneu | dst %in% noneu)]
     flow
   })
   
@@ -334,14 +339,14 @@ server <- function(input, output, session) {
     # Plot network
     dta <- network()
     g <- graph_from_data_frame(dta, directed = TRUE, vertices = centroids)
-    par(mar = c(0,0,0,0), bg = "#555555")
+    par(mar = c(0,0,0,0), bg = "white")
     plot(centroids$x, centroids$y, asp = 1, type = 'n', xlab = "", ylab = "", 
          xaxt = 'n', yaxt = 'n', bty = 'n')
-    plot(map$geometry, add = TRUE, border = "darkgray", col = "black")
+    plot(map$geometry, add = TRUE, border = "gray", col = "lightgray")
     plot(g, coords = coords, rescale = FALSE, 
          add = TRUE, edge.width = 25*(E(g)$weight/max(E(g)$weight)), 
-         edge.color = "#FFFFFF50", edge.arrow.size = 0.2,
-         vertex.label.color = "green", vertex.color = "lightblue",
+         edge.color = "#55555550", edge.arrow.size = 0.2,
+         vertex.label.color = "black", vertex.color = "lightblue",
          edge.curved = TRUE)
   })
   
@@ -349,8 +354,10 @@ server <- function(input, output, session) {
     flow <- filter_product()
     #print(flow)
     # Filter out small flows
+    if (nrow(flow) > 125) {
     flow <- flow[order(-value)]
     flow <- flow[(cumsum(value)/sum(value)) < 0.8]
+    }
     # Build network for alluvial diagram
     nodes <- data.table(
       id = c(unique(paste0(flow$destin_eu, "_d")),

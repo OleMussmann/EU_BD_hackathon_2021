@@ -5,8 +5,9 @@ library(fst)
 library(igraph)
 library(countrycode)
 library(networkD3)
-library(feather)
+library(sf)
 library(fst)
+library(ggplot2)
 library(shinyWidgets)
 
 load("../../years.Rdata")
@@ -64,6 +65,8 @@ import[["weights"]][, sweight := weight/mean(abs(weight)), by = .(country, year)
 import[["weights"]][sweight < 0, sweight := 0]
 
 
+comext_2010 <- fread("~/data/Comext_mnd_aggregatie_2010.csv")
+comext_2010
 # Read ITGS
 # dir_itgs <- "~/data"
 
@@ -88,73 +91,77 @@ import[["weights"]][sweight < 0, sweight := 0]
 
 
 ui <- navbarPage("ITGS", 
-                 tabPanel("Flows", 
-                          fluidPage(
-                            
-                            titlePanel("ITGS"),
-                            
-                            # Sidebar with a slider input for number of bins 
-                            sidebarLayout(
-                              sidebarPanel(
-                                # Client side filtering in selectize
-                                #selectizeInput("product", "Good/service", choices = goods, 
-                                #  selected = NULL, multiple = FALSE, options = NULL),
-                                # Server side filtering in selectize
-                                sliderTextInput("year", "Year:",
-                                                choices=years,
-                                                hide_min_max=TRUE,
-                                                grid=TRUE),
-                                selectizeInput("product", "Good/service", choices = NULL, 
-                                               selected = NULL, multiple = TRUE, options = NULL),
-                                selectizeInput("country", "Country", choices = countries, 
-                                               selected = NULL, multiple = TRUE, options = NULL),
-                                actionButton("update", "Update"),
-                              ),
-                              
-                              # Show a plot of the generated distribution
-                              mainPanel(
-                                plotOutput("network", width = "50vw", height = "40vh"),
-                                sankeyNetworkOutput("alluvial", width = "50vw", height = "40vh")
-                              )
-                            )
-                          )
-                 ),
-                 # tabPanel("Export classification",
-                 #   fluidPage(
-                 #     titlePanel("Export classification"),
-                 #     selectizeInput("country_export", "Country", choices = countries, 
-                 #       selected = NULL, multiple = TRUE, options = NULL),
-                 #     plotOutput("export_w", height = "800px"),
-                 #     plotOutput("export_weights", height = "800px")
-                 #   )
-                 # ),
-                 tabPanel("Import and export classification",
-                          fluidPage(
-                            titlePanel("Import and export classification"),
-                            fillRow(
-                              h2("Import patterns"),
-                              h2("Export patterns"),
-                              height = "100px"
-                            ),
-                            fillRow(
-                              plotOutput("import_w", height = "800px"),
-                              plotOutput("export_w", height = "800px"),
-                              height = "900px"
-                            ),
-                            fillRow(
-                              h2("Importance of import patterns for countries"),
-                              h2("Importance of export patterns for countries"),
-                              height = "100px"
-                            ),
-                            selectizeInput("country_import", "Select countries", choices = countries, 
-                                           selected = NULL, multiple = TRUE, options = NULL),
-                            fillRow(
-                              plotOutput("import_weights", height = "800px"),
-                              plotOutput("export_weights", height = "800px"),
-                              height = "900px"
-                            )
-                          )
-                 )
+   tabPanel("Flows", 
+    fluidPage(
+      
+      titlePanel("ITGS"),
+      
+      # Sidebar with a slider input for number of bins 
+      sidebarLayout(
+        sidebarPanel(
+          # Client side filtering in selectize
+          #selectizeInput("product", "Good/service", choices = goods, 
+          #  selected = NULL, multiple = FALSE, options = NULL),
+          # Server side filtering in selectize
+          sliderTextInput("year", "Year:",
+                          choices=years,
+                          hide_min_max=TRUE,
+                          grid=TRUE),
+          selectizeInput("product", "Good/service", choices = NULL, 
+                         selected = NULL, multiple = TRUE, options = NULL),
+          selectizeInput("country", "Country", choices = countries, 
+                         selected = NULL, multiple = TRUE, options = NULL),
+          actionButton("update", "Update"),
+          fillRow(
+          plotOutput("comext_import", width="300px", height="300px"),
+          plotOutput("comext_export", width="300px", height="300px")
+          )
+        ),
+        
+        # Show a plot of the generated distribution
+        mainPanel(
+          plotOutput("network", width = "50vw", height = "40vh"),
+          sankeyNetworkOutput("alluvial", width = "50vw", height = "40vh"),
+        )
+      )
+    )
+),
+# tabPanel("Export classification",
+#   fluidPage(
+#     titlePanel("Export classification"),
+#     selectizeInput("country_export", "Country", choices = countries, 
+#       selected = NULL, multiple = TRUE, options = NULL),
+#     plotOutput("export_w", height = "800px"),
+#     plotOutput("export_weights", height = "800px")
+#   )
+# ),
+tabPanel("Import and export classification",
+    fluidPage(
+      titlePanel("Import and export classification"),
+      fillRow(
+        h2("Import patterns"),
+        h2("Export patterns"),
+        height = "100px"
+      ),
+      fillRow(
+        plotOutput("import_w", height = "800px"),
+        plotOutput("export_w", height = "800px"),
+        height = "900px"
+      ),
+      fillRow(
+        h2("Importance of import patterns for countries"),
+        h2("Importance of export patterns for countries"),
+        height = "100px"
+      ),
+      selectizeInput("country_import", "Select countries", choices = countries, 
+                     selected = NULL, multiple = TRUE, options = NULL),
+      fillRow(
+        plotOutput("import_weights", height = "800px"),
+        plotOutput("export_weights", height = "800px"),
+        height = "900px"
+      )
+    )
+   )
 )
 
 
@@ -226,7 +233,70 @@ server <- function(input, output, session) {
     flow
   })
   
+  # # start comext
+  # #PERIOD = c(201001, 201002, 201003, 201004, 201005, 201006, 201007, 201008, 201009, 201010, 201011, 201012, 201101) 
+  # YEAR = c(2010, 2010, 2010, 2010, 2010, 2010, 2010, 2010, 2010, 2010, 2010, 2010, 2011)
+  # MONTH = c(01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 01) 
+  # DECLARANT_ISO = c("NL", "NL", "NL", "NL", "NL", "NL", "NL", "NL", "NL", "NL", "NL", "NL", "FR")
+  # PRODUCT_NC = c("01234567", "01234567", "01234567", "01234568", "01234568", "01234567", "01234567", "01234567", "01234567", "01234567", "01234567", "01234567", "01234568")
+  # FLOW = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2) 
+  # VALUE_IN_EUROS = c(10, 35, 10, 60, 55, 10, 35, 10, 60, 55, 11, 25, 15) 
+  # QUANTITY_IN_KG = c(10, 35, 10, 60, 55, 10, 35, 10, 60, 55, 11, 25, 15)  
+  # 
+  # df = data.frame(PERIOD, YEAR, MONTH, DECLARANT_ISO, PRODUCT_NC, FLOW, VALUE_IN_EUROS, QUANTITY_IN_KG)
+  # 
+  df2_import <- df[df$YEAR==2010 && df$FLOW==1]
+  df2_export <- df[df$YEAR==2010 && df$FLOW==2]
+  # 
+  # 
+  # # hard-coded year
+  # #comext_import <- comext_2010[comext_2010$YEAR==2010 && comext_2010$FLOW==1 && comext_2010$country %in% countries && comext_import$PRODUCT_NC %in% product_list]
+  # 
+  # output$comext_import <- reactive({
+  #   # countries <- input$country
+  #   # product <- input$product
+  #   # product_list <- c()
+  #   # for (p in product){
+  #   #   sub_products <- ld[startsWith(ld$HS6_str, p)]$HS6_str
+  #   #   product_list <- append(product_list, sub_products)
+  #   # }
+  #   # comext_import <- comext_2010[comext_2010$YEAR==2010 && comext_2010$FLOW==1 && comext_2010$country %in% countries && comext_import$PRODUCT_NC %in% product_list]
+  #   # renderPlot(ggplot(comext_import, aes(x=MONTH, y=VALUE_IN_EUROS, group=PRODUCT_NC, color=PRODUCT_NC)) + geom_line() + ggtitle("Import"))
+  #   renderPlot(ggplot(df2_import, aes(x=MONTH, y=VALUE_IN_EUROS, group=PRODUCT_NC, color=PRODUCT_NC)) + geom_line() + ggtitle("Import"))
+  #   
+  # })
+  output$comext_import <- renderPlot(ggplot(df2_import, aes(x=MONTH, y=VALUE_IN_EUROS, group=PRODUCT_NC, color=PRODUCT_NC)) + geom_line() + ggtitle("Import"))
+  # 
+  # 
+  # output$comext_import <- reactive({
+  #   # countries <- input$country
+  #   # product <- input$product
+  #   # product_list <- c()
+  #   # for (p in product){
+  #   #   sub_products <- ld[startsWith(ld$HS6_str, p)]$HS6_str
+  #   #   product_list <- append(product_list, sub_products)
+  #   # }
+  #   # comext_export <- comext_2010[comext_2010$YEAR==2010 && comext_2010$FLOW==2 && comext_2010$country %in% countries && comext_import$PRODUCT_NC %in% product_list]
+  #   # renderPlot(ggplot(comext_export, aes(x=MONTH, y=VALUE_IN_EUROS, group=PRODUCT_NC, color=PRODUCT_NC)) + geom_line() + ggtitle("Export"))
+  #   renderPlot(ggplot(df2_export, aes(x=MONTH, y=VALUE_IN_EUROS, group=PRODUCT_NC, color=PRODUCT_NC)) + geom_line() + ggtitle("Export"))
+  # })
+  output$comext_export <- renderPlot(ggplot(df2_export, aes(x=MONTH, y=VALUE_IN_EUROS, group=PRODUCT_NC, color=PRODUCT_NC)) + geom_line() + ggtitle("Export"))
+  # data_import <- reactive({
+  #   countries <- input$country
+  #   product <- input$product
+  #   product_list <- c()
+  #   for (p in product){
+  #     sub_products <- ld[startsWith(ld$HS6_str, p)]$HS6_str
+  #     product_list <- append(product_list, sub_products)
+  #   }
+  #   filtered <- comext_2010[comext_2010$YEAR==2010 && comext_2010$FLOW==1 && comext_2010$country %in% countries && comext_2010$PRODUCT_NC %in% product_list]
+  #   print(filtered)
+  #   filtered
+  # })
+  # 
+  # output$comext_import <- renderPlot(ggplot(data_import(), aes(x=MONTH, y=VALUE_IN_EUROS, group=PRODUCT_NC, color=PRODUCT_NC)) + geom_line() + ggtitle("Import"))
   
+  # end comext
   
   output$network <- renderPlot({
     # Plot network

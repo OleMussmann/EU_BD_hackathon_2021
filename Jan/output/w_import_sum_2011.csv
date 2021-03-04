@@ -1,0 +1,403 @@
+dimension,sitc2,score,sitc2_label
+1,00,2.51779343602791,00 - Live animals chiefly for food
+1,94,0.0358348113466932,"94 - Animals, live, n.e.s., (including zoo animals, pets, insects, etc)"
+1,01,10.3439280935442,01 - Meat and meat preparations
+1,03,1.12186698604497,"03 - Fish, crustacean and molluscs, and preparations thereof"
+1,02,4.87999065041799,02 - Dairy products and birds' eggs
+1,06,3.8556451595262,"06 - Sugar, sugar preparations and honey"
+1,09,5.72276348671652,09 - Miscellaneous edible products and preparations
+1,29,3.91116761044423,"29 - Crude animal and vegetable materials, n.e.s."
+1,05,12.7285429636783,05 - Vegetables and fruit
+1,07,9.1368151984603,"07 - Coffee, tea, cocoa, spices, and manufactures thereof"
+1,04,7.5286890736408,04 - Cereals and cereal preparations
+1,59,17.7312492694545,"59 - Chemical materials and products, n.e.s."
+1,22,3.90964857981378,22 - Oil seeds and oleaginous fruit
+1,08,6.82941491139032,08 - Feeding stuff for animals (not including unmilled cereals)
+1,58,48.9614461413603,"58 - Artificial resins and plastic materials, and cellulose esters and ethers"
+1,26,3.22286297683357,26 - Textile fibres (not wool tops) and their wastes (not manufactured into yarn or fabric)
+1,41,0.0777966776886201,41 - Animal oils and fats
+1,42,3.51176359993605,42 - Fixed vegetable oils and fats
+1,43,1.1666631453029,"43 - Animal and vegetable oils and fats, processed, and waxes of animal or vegetable origin"
+1,51,18.36183921003,51 - Organic chemicals
+1,11,3.76859414500056,11 - Beverages
+1,12,2.53210122474994,12 - Tobacco and tobacco manufactures
+1,27,2.74387895571128,"27 - Crude fertilizer and crude minerals (excluding coal, petroleum and precious stones)"
+1,66,17.1121133555218,"66 - Non-metallic mineral manufactures, n.e.s."
+1,28,15.3261067677488,28 - Metalliferous ores and metal scrap
+1,32,11.8332623324758,"32 - Coal, coke and briquettes"
+1,34,26.148705906234,"34 - Gas, natural and manufactured"
+1,33,73.7791735699517,"33 - Petroleum, petroleum products and related materials"
+1,35,10.3937599937041,35 - Electric current
+1,52,8.14056340717953,52 - Inorganic chemicals
+1,68,37.8095351624384,68 - Non-ferrous metals
+1,54,43.2500937870775,54 - Medicinal and pharmaceutical products
+1,89,46.0319341535104,"89 - Miscellaneous manufactured articles, n.e.s."
+1,56,3.70653390795458,"56 - Fertilizers, manufactured"
+1,53,8.74896084491954,"53 - Dyeing, tanning and colouring materials"
+1,55,12.8301868360522,55 - Oils and perfume materials; toilet and cleansing preparations
+1,57,0.465537621362458,57 - Explosives and pyrotechnic products
+1,88,6.00426782637963,"88 - Photographic equipment and supplies and optical goods, n.e.s.; watches and clocks"
+1,87,30.0868339578154,"87 - Professional, scientific and controlling instruments and apparatus, n.e.s."
+1,84,26.2388675323828,84 - Articles of apparel and clothing accessories
+1,23,9.2390166581896,23 - Crude rubber (including synthetic and reclaimed)
+1,62,23.0054493561519,"62 - Rubber manufactures, n.e.s."
+1,21,0.635490881936335,"21 - Hides, skins and furskins, raw"
+1,61,8.11071548277118,"61 - Leather, leather manufactures, n.e.s., and dressed furskins"
+1,83,2.27614492144649,"83 - Travel goods, handbags and similar containers"
+1,24,5.45102715807136,24 - Cork and wood
+1,63,6.10559652746114,"63 - Cork and wood, cork manufactures (excluding furniture)"
+1,64,21.8722815218804,"64 - Paper, paperboard, and articles of pulp, of paper or of paperboard"
+1,65,27.153604138975,"65 - Textile yarn, fabrics, made-up articles, n.e.s., and related products"
+1,25,4.57161313511826,25 - Pulp and waste paper
+1,77,145.503023197114,"77 - Electric machinery, apparatus and appliances, n.e.s., and electrical parts thereof"
+1,85,8.60627183196999,85 - Footwear
+1,81,7.04892461494487,"81 - Sanitary, plumbing, heating, lighting fixtures and fittings, n.e.s."
+1,97,1.63641614505749,"97 - Gold, non-monetary (excluding gold ores and concentrates)"
+1,96,0.0375022199606635,"96 - Coin (other than gold coin), not being legal tender"
+1,67,77.244570109598,67 - Iron and steel
+1,69,54.4841493754782,"69 - Manufactures of metals, n.e.s."
+1,72,36.4356519935684,72 - Machinery specialized for particular industries
+1,71,54.9780929645724,71 - Power generating machinery and equipment
+1,74,74.7218866989486,"74 - General industrial machinery and equipment, n.e.s., and parts of, n.e.s."
+1,75,49.2110249992768,75 - Office machines and automatic data processing equipment
+1,73,11.9175657975339,73 - Metalworking machinery
+1,76,94.2984360339779,"76 - Telecommunications, sound recording and reproducing equipment"
+1,79,7.08274348099553,79 - Other transport equipment
+1,78,140.06625022464,78 - Road vehicles (including air-cushion vehicles)
+1,95,0.229150136963745,"95 - Armoured fighting vehicles, war firearms, ammunition, parts, n.e.s."
+1,82,14.0087960863186,82 - Furniture and parts thereof
+2,00,4.0139039836991,00 - Live animals chiefly for food
+2,94,0.0400391989532068,"94 - Animals, live, n.e.s., (including zoo animals, pets, insects, etc)"
+2,01,20.7373587341639,01 - Meat and meat preparations
+2,03,3.08572081280583,"03 - Fish, crustacean and molluscs, and preparations thereof"
+2,02,12.7198879934771,02 - Dairy products and birds' eggs
+2,06,6.21266235707438,"06 - Sugar, sugar preparations and honey"
+2,09,11.8420411184643,09 - Miscellaneous edible products and preparations
+2,29,2.80222495118166,"29 - Crude animal and vegetable materials, n.e.s."
+2,05,15.3395459609007,05 - Vegetables and fruit
+2,07,17.3258635069183,"07 - Coffee, tea, cocoa, spices, and manufactures thereof"
+2,04,15.9207245464673,04 - Cereals and cereal preparations
+2,59,9.59004131698394,"59 - Chemical materials and products, n.e.s."
+2,22,0.735253267528213,22 - Oil seeds and oleaginous fruit
+2,08,8.50219949837806,08 - Feeding stuff for animals (not including unmilled cereals)
+2,58,18.807352328773,"58 - Artificial resins and plastic materials, and cellulose esters and ethers"
+2,26,0.82936319431075,26 - Textile fibres (not wool tops) and their wastes (not manufactured into yarn or fabric)
+2,41,1.13234895159857,41 - Animal oils and fats
+2,42,3.8492798497027,42 - Fixed vegetable oils and fats
+2,43,0.491842246063958,"43 - Animal and vegetable oils and fats, processed, and waxes of animal or vegetable origin"
+2,51,6.3963632698145,51 - Organic chemicals
+2,11,23.3056287231731,11 - Beverages
+2,12,5.41254977444659,12 - Tobacco and tobacco manufactures
+2,27,3.60542525253138,"27 - Crude fertilizer and crude minerals (excluding coal, petroleum and precious stones)"
+2,66,21.4135129520731,"66 - Non-metallic mineral manufactures, n.e.s."
+2,28,46.9628474833906,28 - Metalliferous ores and metal scrap
+2,32,7.44733327985988,"32 - Coal, coke and briquettes"
+2,34,70.5523431880263,"34 - Gas, natural and manufactured"
+2,33,160.054104654834,"33 - Petroleum, petroleum products and related materials"
+2,35,28.6887450290635,35 - Electric current
+2,52,6.63318254112272,52 - Inorganic chemicals
+2,68,21.5690210473732,68 - Non-ferrous metals
+2,54,28.8927062510034,54 - Medicinal and pharmaceutical products
+2,89,32.1372795988522,"89 - Miscellaneous manufactured articles, n.e.s."
+2,56,8.61764232006333,"56 - Fertilizers, manufactured"
+2,53,7.57643347131624,"53 - Dyeing, tanning and colouring materials"
+2,55,16.6650453906105,55 - Oils and perfume materials; toilet and cleansing preparations
+2,57,0.196841991870815,57 - Explosives and pyrotechnic products
+2,88,3.24796272050148,"88 - Photographic equipment and supplies and optical goods, n.e.s.; watches and clocks"
+2,87,8.76144539692016,"87 - Professional, scientific and controlling instruments and apparatus, n.e.s."
+2,84,19.5843876362687,84 - Articles of apparel and clothing accessories
+2,23,9.30020162910518,23 - Crude rubber (including synthetic and reclaimed)
+2,62,13.1454683563649,"62 - Rubber manufactures, n.e.s."
+2,21,0.198966003927297,"21 - Hides, skins and furskins, raw"
+2,61,0.341120645937296,"61 - Leather, leather manufactures, n.e.s., and dressed furskins"
+2,83,1.66711881300684,"83 - Travel goods, handbags and similar containers"
+2,24,7.20762868719431,24 - Cork and wood
+2,63,8.77408872954726,"63 - Cork and wood, cork manufactures (excluding furniture)"
+2,64,17.77233650773,"64 - Paper, paperboard, and articles of pulp, of paper or of paperboard"
+2,65,12.8297421092725,"65 - Textile yarn, fabrics, made-up articles, n.e.s., and related products"
+2,25,0.0194513044865613,25 - Pulp and waste paper
+2,77,45.7249209533791,"77 - Electric machinery, apparatus and appliances, n.e.s., and electrical parts thereof"
+2,85,10.7619038507264,85 - Footwear
+2,81,4.6217526825508,"81 - Sanitary, plumbing, heating, lighting fixtures and fittings, n.e.s."
+2,97,2.59531043755887,"97 - Gold, non-monetary (excluding gold ores and concentrates)"
+2,96,0.135104793279539,"96 - Coin (other than gold coin), not being legal tender"
+2,67,37.1796283317817,67 - Iron and steel
+2,69,27.4604906652894,"69 - Manufactures of metals, n.e.s."
+2,72,24.4592005618948,72 - Machinery specialized for particular industries
+2,71,7.32139521368446,71 - Power generating machinery and equipment
+2,74,28.6851709820427,"74 - General industrial machinery and equipment, n.e.s., and parts of, n.e.s."
+2,75,16.5695744246973,75 - Office machines and automatic data processing equipment
+2,73,2.10303591835132,73 - Metalworking machinery
+2,76,31.1424199109068,"76 - Telecommunications, sound recording and reproducing equipment"
+2,79,45.5574788421829,79 - Other transport equipment
+2,78,68.3563109022724,78 - Road vehicles (including air-cushion vehicles)
+2,95,2.518292919459,"95 - Armoured fighting vehicles, war firearms, ammunition, parts, n.e.s."
+2,82,14.7393128577402,82 - Furniture and parts thereof
+3,00,0.0632774031004624,00 - Live animals chiefly for food
+3,94,1.77635683940025e-15,"94 - Animals, live, n.e.s., (including zoo animals, pets, insects, etc)"
+3,01,3.12240373575854,01 - Meat and meat preparations
+3,03,0.00260044573146888,"03 - Fish, crustacean and molluscs, and preparations thereof"
+3,02,1.07633625440692,02 - Dairy products and birds' eggs
+3,06,0.0485153428489154,"06 - Sugar, sugar preparations and honey"
+3,09,2.10705238108979,09 - Miscellaneous edible products and preparations
+3,29,3.53303641950784,"29 - Crude animal and vegetable materials, n.e.s."
+3,05,0.979102333654406,05 - Vegetables and fruit
+3,07,0.506988705515076,"07 - Coffee, tea, cocoa, spices, and manufactures thereof"
+3,04,0.471407109459763,04 - Cereals and cereal preparations
+3,59,2.19306715037527,"59 - Chemical materials and products, n.e.s."
+3,22,0.0169443822442022,22 - Oil seeds and oleaginous fruit
+3,08,2.35797425997947,08 - Feeding stuff for animals (not including unmilled cereals)
+3,58,9.47240863251735,"58 - Artificial resins and plastic materials, and cellulose esters and ethers"
+3,26,0.00614757400186038,26 - Textile fibres (not wool tops) and their wastes (not manufactured into yarn or fabric)
+3,41,1.33226762955019e-15,41 - Animal oils and fats
+3,42,0.00720035457272369,42 - Fixed vegetable oils and fats
+3,43,2.22044604925031e-15,"43 - Animal and vegetable oils and fats, processed, and waxes of animal or vegetable origin"
+3,51,0.807914965559531,51 - Organic chemicals
+3,11,0.74844174787716,11 - Beverages
+3,12,1.77635683940025e-15,12 - Tobacco and tobacco manufactures
+3,27,1.26396697267332,"27 - Crude fertilizer and crude minerals (excluding coal, petroleum and precious stones)"
+3,66,31.6596134799609,"66 - Non-metallic mineral manufactures, n.e.s."
+3,28,0.00304269696289706,28 - Metalliferous ores and metal scrap
+3,32,1.77635683940025e-15,"32 - Coal, coke and briquettes"
+3,34,0.323214888404528,"34 - Gas, natural and manufactured"
+3,33,1.18417519084824,"33 - Petroleum, petroleum products and related materials"
+3,35,2.22044604925031e-16,35 - Electric current
+3,52,0.472901156354916,52 - Inorganic chemicals
+3,68,12.4802094991386,68 - Non-ferrous metals
+3,54,0.448218466298773,54 - Medicinal and pharmaceutical products
+3,89,44.189229814364,"89 - Miscellaneous manufactured articles, n.e.s."
+3,56,4.66293670342566e-15,"56 - Fertilizers, manufactured"
+3,53,17.2941117572495,"53 - Dyeing, tanning and colouring materials"
+3,55,0.331634796495797,55 - Oils and perfume materials; toilet and cleansing preparations
+3,57,1.11022302462516e-15,57 - Explosives and pyrotechnic products
+3,88,5.61274090252246,"88 - Photographic equipment and supplies and optical goods, n.e.s.; watches and clocks"
+3,87,19.2403733377885,"87 - Professional, scientific and controlling instruments and apparatus, n.e.s."
+3,84,0.629049121270657,84 - Articles of apparel and clothing accessories
+3,23,0.0865418607665808,23 - Crude rubber (including synthetic and reclaimed)
+3,62,2.45188293762185,"62 - Rubber manufactures, n.e.s."
+3,21,3.33066907387547e-15,"21 - Hides, skins and furskins, raw"
+3,61,0.00626727033023095,"61 - Leather, leather manufactures, n.e.s., and dressed furskins"
+3,83,1.50519731240752,"83 - Travel goods, handbags and similar containers"
+3,24,1.22843435784576,24 - Cork and wood
+3,63,4.68201811826594,"63 - Cork and wood, cork manufactures (excluding furniture)"
+3,64,7.89134659703528,"64 - Paper, paperboard, and articles of pulp, of paper or of paperboard"
+3,65,1.04275587919841,"65 - Textile yarn, fabrics, made-up articles, n.e.s., and related products"
+3,25,0.0569918909626364,25 - Pulp and waste paper
+3,77,53.4607284258417,"77 - Electric machinery, apparatus and appliances, n.e.s., and electrical parts thereof"
+3,85,0.0520544721695479,85 - Footwear
+3,81,2.26073540264951,"81 - Sanitary, plumbing, heating, lighting fixtures and fittings, n.e.s."
+3,97,15.3337411358816,"97 - Gold, non-monetary (excluding gold ores and concentrates)"
+3,96,2.22044604925031e-16,"96 - Coin (other than gold coin), not being legal tender"
+3,67,31.6365319155126,67 - Iron and steel
+3,69,89.4525585670217,"69 - Manufactures of metals, n.e.s."
+3,72,23.5195933392097,72 - Machinery specialized for particular industries
+3,71,12.9496467399194,71 - Power generating machinery and equipment
+3,74,50.5543689405512,"74 - General industrial machinery and equipment, n.e.s., and parts of, n.e.s."
+3,75,1.96319018068351,75 - Office machines and automatic data processing equipment
+3,73,8.45676845109043,73 - Metalworking machinery
+3,76,1.3444011053853,"76 - Telecommunications, sound recording and reproducing equipment"
+3,79,0.535087685916829,79 - Other transport equipment
+3,78,33.2541971781602,78 - Road vehicles (including air-cushion vehicles)
+3,95,1.98169061521408,"95 - Armoured fighting vehicles, war firearms, ammunition, parts, n.e.s."
+3,82,10.0655427532056,82 - Furniture and parts thereof
+4,00,3.23951187531555,00 - Live animals chiefly for food
+4,94,0.0736099000094608,"94 - Animals, live, n.e.s., (including zoo animals, pets, insects, etc)"
+4,01,22.5130129765213,01 - Meat and meat preparations
+4,03,7.56314392776329,"03 - Fish, crustacean and molluscs, and preparations thereof"
+4,02,11.42897877675,02 - Dairy products and birds' eggs
+4,06,6.07432793845804,"06 - Sugar, sugar preparations and honey"
+4,09,9.06252527576102,09 - Miscellaneous edible products and preparations
+4,29,3.57240393590081,"29 - Crude animal and vegetable materials, n.e.s."
+4,05,20.0473432751675,05 - Vegetables and fruit
+4,07,11.3222395624654,"07 - Coffee, tea, cocoa, spices, and manufactures thereof"
+4,04,12.7175448941263,04 - Cereals and cereal preparations
+4,59,18.9878412936103,"59 - Chemical materials and products, n.e.s."
+4,22,2.34491756659751,22 - Oil seeds and oleaginous fruit
+4,08,6.74507936657324,08 - Feeding stuff for animals (not including unmilled cereals)
+4,58,39.6889441275831,"58 - Artificial resins and plastic materials, and cellulose esters and ethers"
+4,26,6.65233937506003,26 - Textile fibres (not wool tops) and their wastes (not manufactured into yarn or fabric)
+4,41,0.133575102093307,41 - Animal oils and fats
+4,42,9.55000992934493,42 - Fixed vegetable oils and fats
+4,43,0.934283641365709,"43 - Animal and vegetable oils and fats, processed, and waxes of animal or vegetable origin"
+4,51,21.4968306136913,51 - Organic chemicals
+4,11,8.6021258700984,11 - Beverages
+4,12,9.57652091150953,12 - Tobacco and tobacco manufactures
+4,27,6.80216791682336,"27 - Crude fertilizer and crude minerals (excluding coal, petroleum and precious stones)"
+4,66,16.2519572258344,"66 - Non-metallic mineral manufactures, n.e.s."
+4,28,46.3915765755583,28 - Metalliferous ores and metal scrap
+4,32,9.56409367681897,"32 - Coal, coke and briquettes"
+4,34,52.8273356715869,"34 - Gas, natural and manufactured"
+4,33,322.584103267868,"33 - Petroleum, petroleum products and related materials"
+4,35,19.2005681697111,35 - Electric current
+4,52,8.0878918626512,52 - Inorganic chemicals
+4,68,38.8433141830916,68 - Non-ferrous metals
+4,54,52.6199880618003,54 - Medicinal and pharmaceutical products
+4,89,26.5069995674258,"89 - Miscellaneous manufactured articles, n.e.s."
+4,56,8.10687677882213,"56 - Fertilizers, manufactured"
+4,53,9.5360211876692,"53 - Dyeing, tanning and colouring materials"
+4,55,18.2399490647573,55 - Oils and perfume materials; toilet and cleansing preparations
+4,57,0.32089224094555,57 - Explosives and pyrotechnic products
+4,88,4.41490522139259,"88 - Photographic equipment and supplies and optical goods, n.e.s.; watches and clocks"
+4,87,11.2477787202223,"87 - Professional, scientific and controlling instruments and apparatus, n.e.s."
+4,84,26.4656805449568,84 - Articles of apparel and clothing accessories
+4,23,3.03044673636524,23 - Crude rubber (including synthetic and reclaimed)
+4,62,10.2094534373256,"62 - Rubber manufactures, n.e.s."
+4,21,1.8528569394403,"21 - Hides, skins and furskins, raw"
+4,61,7.68421521626789,"61 - Leather, leather manufactures, n.e.s., and dressed furskins"
+4,83,2.02188894200569,"83 - Travel goods, handbags and similar containers"
+4,24,4.38492565770291,24 - Cork and wood
+4,63,5.47960868350586,"63 - Cork and wood, cork manufactures (excluding furniture)"
+4,64,23.2267644267895,"64 - Paper, paperboard, and articles of pulp, of paper or of paperboard"
+4,65,48.8154209611396,"65 - Textile yarn, fabrics, made-up articles, n.e.s., and related products"
+4,25,1.89211727500068,25 - Pulp and waste paper
+4,77,49.3324009111803,"77 - Electric machinery, apparatus and appliances, n.e.s., and electrical parts thereof"
+4,85,9.45077142068981,85 - Footwear
+4,81,3.85327338291392,"81 - Sanitary, plumbing, heating, lighting fixtures and fittings, n.e.s."
+4,97,0.00336524583758949,"97 - Gold, non-monetary (excluding gold ores and concentrates)"
+4,96,0.013409009422861,"96 - Coin (other than gold coin), not being legal tender"
+4,67,52.4162583616468,67 - Iron and steel
+4,69,20.1566396919541,"69 - Manufactures of metals, n.e.s."
+4,72,28.0430942285562,72 - Machinery specialized for particular industries
+4,71,12.4123307211608,71 - Power generating machinery and equipment
+4,74,35.6421850608216,"74 - General industrial machinery and equipment, n.e.s., and parts of, n.e.s."
+4,75,14.1421788516715,75 - Office machines and automatic data processing equipment
+4,73,2.71349318408655,73 - Metalworking machinery
+4,76,28.7633916128728,"76 - Telecommunications, sound recording and reproducing equipment"
+4,79,8.31140431276641,79 - Other transport equipment
+4,78,71.7664540974814,78 - Road vehicles (including air-cushion vehicles)
+4,95,0.655904828664163,"95 - Armoured fighting vehicles, war firearms, ammunition, parts, n.e.s."
+4,82,6.968209512123,82 - Furniture and parts thereof
+5,00,0.0460811218270401,00 - Live animals chiefly for food
+5,94,0.00381820535158995,"94 - Animals, live, n.e.s., (including zoo animals, pets, insects, etc)"
+5,01,7.26484319042644,01 - Meat and meat preparations
+5,03,1.88571071166016,"03 - Fish, crustacean and molluscs, and preparations thereof"
+5,02,4.03474425434324,02 - Dairy products and birds' eggs
+5,06,1.81968414037506,"06 - Sugar, sugar preparations and honey"
+5,09,3.33242043840725,09 - Miscellaneous edible products and preparations
+5,29,0.764784599863172,"29 - Crude animal and vegetable materials, n.e.s."
+5,05,5.29384257015923,05 - Vegetables and fruit
+5,07,2.58594117858749,"07 - Coffee, tea, cocoa, spices, and manufactures thereof"
+5,04,6.34854071804302,04 - Cereals and cereal preparations
+5,59,4.23100228119037,"59 - Chemical materials and products, n.e.s."
+5,22,0.1207857578055,22 - Oil seeds and oleaginous fruit
+5,08,4.27408858766808,08 - Feeding stuff for animals (not including unmilled cereals)
+5,58,5.58714182428702,"58 - Artificial resins and plastic materials, and cellulose esters and ethers"
+5,26,0.163206915052479,26 - Textile fibres (not wool tops) and their wastes (not manufactured into yarn or fabric)
+5,41,0.00179316917947777,41 - Animal oils and fats
+5,42,2.05462866107673,42 - Fixed vegetable oils and fats
+5,43,0.110150534698586,"43 - Animal and vegetable oils and fats, processed, and waxes of animal or vegetable origin"
+5,51,9.71818208816751,51 - Organic chemicals
+5,11,5.45875836396523,11 - Beverages
+5,12,3.5242907420019,12 - Tobacco and tobacco manufactures
+5,27,0.373051885319769,"27 - Crude fertilizer and crude minerals (excluding coal, petroleum and precious stones)"
+5,66,6.44030403373067,"66 - Non-metallic mineral manufactures, n.e.s."
+5,28,0.0093475375091829,28 - Metalliferous ores and metal scrap
+5,32,5.04151217195664,"32 - Coal, coke and briquettes"
+5,34,3.36040862131797,"34 - Gas, natural and manufactured"
+5,33,181.340879583727,"33 - Petroleum, petroleum products and related materials"
+5,35,2.22044604925031e-16,35 - Electric current
+5,52,1.31120042394469,52 - Inorganic chemicals
+5,68,11.5850781246018,68 - Non-ferrous metals
+5,54,13.4206034559781,54 - Medicinal and pharmaceutical products
+5,89,13.1528259982183,"89 - Miscellaneous manufactured articles, n.e.s."
+5,56,0.65283276328942,"56 - Fertilizers, manufactured"
+5,53,2.06973767512473,"53 - Dyeing, tanning and colouring materials"
+5,55,7.19066885704573,55 - Oils and perfume materials; toilet and cleansing preparations
+5,57,0.116299365866337,57 - Explosives and pyrotechnic products
+5,88,2.84621246191652,"88 - Photographic equipment and supplies and optical goods, n.e.s.; watches and clocks"
+5,87,3.71786924914435,"87 - Professional, scientific and controlling instruments and apparatus, n.e.s."
+5,84,14.5710336262693,84 - Articles of apparel and clothing accessories
+5,23,0.759279651854169,23 - Crude rubber (including synthetic and reclaimed)
+5,62,1.81632776900553,"62 - Rubber manufactures, n.e.s."
+5,21,0.0202515838150857,"21 - Hides, skins and furskins, raw"
+5,61,0.053500943786979,"61 - Leather, leather manufactures, n.e.s., and dressed furskins"
+5,83,1.31981070224245,"83 - Travel goods, handbags and similar containers"
+5,24,0.714145082748432,24 - Cork and wood
+5,63,1.08902932025893,"63 - Cork and wood, cork manufactures (excluding furniture)"
+5,64,6.75224354554886,"64 - Paper, paperboard, and articles of pulp, of paper or of paperboard"
+5,65,3.03781758612092,"65 - Textile yarn, fabrics, made-up articles, n.e.s., and related products"
+5,25,0.000308850575197998,25 - Pulp and waste paper
+5,77,36.6274589238658,"77 - Electric machinery, apparatus and appliances, n.e.s., and electrical parts thereof"
+5,85,2.98490935730784,85 - Footwear
+5,81,1.40153872985585,"81 - Sanitary, plumbing, heating, lighting fixtures and fittings, n.e.s."
+5,97,1.73478437924902,"97 - Gold, non-monetary (excluding gold ores and concentrates)"
+5,96,0.0167413968603299,"96 - Coin (other than gold coin), not being legal tender"
+5,67,6.84350704668868,67 - Iron and steel
+5,69,8.07496295991013,"69 - Manufactures of metals, n.e.s."
+5,72,4.87329974737682,72 - Machinery specialized for particular industries
+5,71,5.28430099356437,71 - Power generating machinery and equipment
+5,74,9.94985440608392,"74 - General industrial machinery and equipment, n.e.s., and parts of, n.e.s."
+5,75,5.99282804342654,75 - Office machines and automatic data processing equipment
+5,73,0.411529720609482,73 - Metalworking machinery
+5,76,10.8040736307831,"76 - Telecommunications, sound recording and reproducing equipment"
+5,79,188.635207450546,79 - Other transport equipment
+5,78,15.8831407477742,78 - Road vehicles (including air-cushion vehicles)
+5,95,0.0684771086782905,"95 - Armoured fighting vehicles, war firearms, ammunition, parts, n.e.s."
+5,82,5.87826303806564,82 - Furniture and parts thereof
+6,00,0.574641329658469,00 - Live animals chiefly for food
+6,94,0.149178230066233,"94 - Animals, live, n.e.s., (including zoo animals, pets, insects, etc)"
+6,01,14.4453622762734,01 - Meat and meat preparations
+6,03,4.3313790540408,"03 - Fish, crustacean and molluscs, and preparations thereof"
+6,02,9.08187392411446,02 - Dairy products and birds' eggs
+6,06,2.7732964633902,"06 - Sugar, sugar preparations and honey"
+6,09,7.65422216099484,09 - Miscellaneous edible products and preparations
+6,29,7.04595894892908,"29 - Crude animal and vegetable materials, n.e.s."
+6,05,22.5613816590788,05 - Vegetables and fruit
+6,07,11.387181051514,"07 - Coffee, tea, cocoa, spices, and manufactures thereof"
+6,04,9.71458933538256,04 - Cereals and cereal preparations
+6,59,20.9133835107257,"59 - Chemical materials and products, n.e.s."
+6,22,1.45966904782398,22 - Oil seeds and oleaginous fruit
+6,08,10.7929572622791,08 - Feeding stuff for animals (not including unmilled cereals)
+6,58,35.0737615543502,"58 - Artificial resins and plastic materials, and cellulose esters and ethers"
+6,26,0.580082151438567,26 - Textile fibres (not wool tops) and their wastes (not manufactured into yarn or fabric)
+6,41,1.07887304810886,41 - Animal oils and fats
+6,42,6.46194701838857,42 - Fixed vegetable oils and fats
+6,43,1.86774512662093,"43 - Animal and vegetable oils and fats, processed, and waxes of animal or vegetable origin"
+6,51,60.7679021179203,51 - Organic chemicals
+6,11,13.2496427689718,11 - Beverages
+6,12,3.03549628523651,12 - Tobacco and tobacco manufactures
+6,27,4.4419349277597,"27 - Crude fertilizer and crude minerals (excluding coal, petroleum and precious stones)"
+6,66,30.8760024625439,"66 - Non-metallic mineral manufactures, n.e.s."
+6,28,29.5793579651503,28 - Metalliferous ores and metal scrap
+6,32,8.13076365220585,"32 - Coal, coke and briquettes"
+6,34,17.3409035839341,"34 - Gas, natural and manufactured"
+6,33,110.238530834972,"33 - Petroleum, petroleum products and related materials"
+6,35,6.21286576301773,35 - Electric current
+6,52,14.2392933994997,52 - Inorganic chemicals
+6,68,39.8208289912122,68 - Non-ferrous metals
+6,54,95.4013284669868,54 - Medicinal and pharmaceutical products
+6,89,76.607563334539,"89 - Miscellaneous manufactured articles, n.e.s."
+6,56,4.76169019491432,"56 - Fertilizers, manufactured"
+6,53,7.28709284387487,"53 - Dyeing, tanning and colouring materials"
+6,55,16.486266750685,55 - Oils and perfume materials; toilet and cleansing preparations
+6,57,0.354645495701088,57 - Explosives and pyrotechnic products
+6,88,13.5837037389325,"88 - Photographic equipment and supplies and optical goods, n.e.s.; watches and clocks"
+6,87,35.3594187803169,"87 - Professional, scientific and controlling instruments and apparatus, n.e.s."
+6,84,63.6228581186881,84 - Articles of apparel and clothing accessories
+6,23,1.80374669072309,23 - Crude rubber (including synthetic and reclaimed)
+6,62,12.1351360871281,"62 - Rubber manufactures, n.e.s."
+6,21,1.1339558792596,"21 - Hides, skins and furskins, raw"
+6,61,0.776830912004425,"61 - Leather, leather manufactures, n.e.s., and dressed furskins"
+6,83,6.0414917678975,"83 - Travel goods, handbags and similar containers"
+6,24,7.33439907730485,24 - Cork and wood
+6,63,10.1726041717736,"63 - Cork and wood, cork manufactures (excluding furniture)"
+6,64,21.8393209647041,"64 - Paper, paperboard, and articles of pulp, of paper or of paperboard"
+6,65,14.4136003476891,"65 - Textile yarn, fabrics, made-up articles, n.e.s., and related products"
+6,25,4.60680891607063,25 - Pulp and waste paper
+6,77,68.6038279512347,"77 - Electric machinery, apparatus and appliances, n.e.s., and electrical parts thereof"
+6,85,13.5485931857129,85 - Footwear
+6,81,6.97591936464485,"81 - Sanitary, plumbing, heating, lighting fixtures and fittings, n.e.s."
+6,97,52.0330265816989,"97 - Gold, non-monetary (excluding gold ores and concentrates)"
+6,96,0.0866169252118924,"96 - Coin (other than gold coin), not being legal tender"
+6,67,37.2468009478065,67 - Iron and steel
+6,69,37.9383155439333,"69 - Manufactures of metals, n.e.s."
+6,72,36.1988622084796,72 - Machinery specialized for particular industries
+6,71,31.4592896734738,71 - Power generating machinery and equipment
+6,74,58.6769210921374,"74 - General industrial machinery and equipment, n.e.s., and parts of, n.e.s."
+6,75,63.1556794116473,75 - Office machines and automatic data processing equipment
+6,73,4.91602620190944,73 - Metalworking machinery
+6,76,46.7797860249503,"76 - Telecommunications, sound recording and reproducing equipment"
+6,79,41.6942054238116,79 - Other transport equipment
+6,78,133.969969621236,78 - Road vehicles (including air-cushion vehicles)
+6,95,1.08970720030045,"95 - Armoured fighting vehicles, war firearms, ammunition, parts, n.e.s."
+6,82,23.2297521916926,82 - Furniture and parts thereof

@@ -10,11 +10,11 @@ library(fst)
 library(ggplot2)
 library(shinyWidgets)
 
-load("../../years.Rdata")
-load("../../centroids.Rdata")
-load("../../coords.Rdata")
-load("../../unique_countries.Rdata")
-load("../../unique_goods.Rdata")
+load("years.Rdata")
+load("centroids.Rdata")
+load("coords.Rdata")
+load("unique_countries.Rdata")
+load("unique_goods.Rdata")
 
 #load("unique_goods.Rdata")
 goods <- unique_goods
@@ -22,7 +22,7 @@ countries <- unique_countries
 
 names(goods) <- goods
 
-ld <- fread("~/EU_BD_hackathon_2021/hulpdata/labels_and_descriptions.csv")
+ld <- fread("../hulpdata/labels_and_descriptions.csv")
 ld <- ld[!is.na(ld$HS6_float),]
 ld$HS6_str <- as.character(ld$HS6_float)
 
@@ -36,7 +36,7 @@ itgs_list <- vector(mode="list", length=length(years))
 names(itgs_list) <- years
 
 for (year in years) {
-  load(paste("../../itgs_", year, ".Rdata", sep=""))
+  load(paste("itgs_", year, ".Rdata", sep=""))
   itgs_list[[year]] <- itgs
 }
 
@@ -65,8 +65,13 @@ import[["weights"]][, sweight := weight/mean(abs(weight)), by = .(country, year)
 import[["weights"]][sweight < 0, sweight := 0]
 
 
-comext_2010 <- fread("~/data/Comext_mnd_aggregatie_2010.csv")
+comext_2010 <- fread("../../comext/Comext_mnd_aggregatie_2010.csv")
 comext_2010
+comext_2010[, hs6 := as.numeric(substr(PRODUCT_NC, 1, 6))]
+    comext_2010 <- comext_2010[complete.cases(comext_2010)]
+     
+    comext_2010[, FLOW := factor(FLOW, 1:2, labels = c("Import", "Export"))]
+
 # Read ITGS
 # dir_itgs <- "~/data"
 
@@ -112,16 +117,15 @@ ui <- navbarPage("ITGS",
           selectizeInput("country", "Country", choices = countries, 
                          selected = NULL, multiple = TRUE, options = NULL),
           actionButton("update", "Update"),
-          fillRow(
-          plotOutput("comext_import", width="300px", height="300px"),
-          plotOutput("comext_export", width="300px", height="300px")
-          )
+          
         ),
         
         # Show a plot of the generated distribution
         mainPanel(
           plotOutput("network", width = "50vw", height = "40vh"),
           sankeyNetworkOutput("alluvial", width = "50vw", height = "40vh"),
+          plotOutput("comext_import", height="600px"),
+          
         )
       )
     )
@@ -233,20 +237,20 @@ server <- function(input, output, session) {
     flow
   })
   
-  # # start comext
-  # #PERIOD = c(201001, 201002, 201003, 201004, 201005, 201006, 201007, 201008, 201009, 201010, 201011, 201012, 201101) 
+  # start comext
+  # PERIOD = c(201001, 201002, 201003, 201004, 201005, 201006, 201007, 201008, 201009, 201010, 201011, 201012, 201101)
   # YEAR = c(2010, 2010, 2010, 2010, 2010, 2010, 2010, 2010, 2010, 2010, 2010, 2010, 2011)
-  # MONTH = c(01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 01) 
+  # MONTH = c(01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 01)
   # DECLARANT_ISO = c("NL", "NL", "NL", "NL", "NL", "NL", "NL", "NL", "NL", "NL", "NL", "NL", "FR")
   # PRODUCT_NC = c("01234567", "01234567", "01234567", "01234568", "01234568", "01234567", "01234567", "01234567", "01234567", "01234567", "01234567", "01234567", "01234568")
-  # FLOW = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2) 
-  # VALUE_IN_EUROS = c(10, 35, 10, 60, 55, 10, 35, 10, 60, 55, 11, 25, 15) 
-  # QUANTITY_IN_KG = c(10, 35, 10, 60, 55, 10, 35, 10, 60, 55, 11, 25, 15)  
+  # FLOW = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2)
+  # VALUE_IN_EUROS = c(10, 35, 10, 60, 55, 10, 35, 10, 60, 55, 11, 25, 15)
+  # QUANTITY_IN_KG = c(10, 35, 10, 60, 55, 10, 35, 10, 60, 55, 11, 25, 15)
   # 
   # df = data.frame(PERIOD, YEAR, MONTH, DECLARANT_ISO, PRODUCT_NC, FLOW, VALUE_IN_EUROS, QUANTITY_IN_KG)
   # 
-  df2_import <- df[df$YEAR==2010 && df$FLOW==1]
-  df2_export <- df[df$YEAR==2010 && df$FLOW==2]
+  # df2_import <- df[df$YEAR==2010 && df$FLOW==1]
+  # df2_export <- df[df$YEAR==2010 && df$FLOW==2]
   # 
   # 
   # # hard-coded year
@@ -265,7 +269,35 @@ server <- function(input, output, session) {
   #   renderPlot(ggplot(df2_import, aes(x=MONTH, y=VALUE_IN_EUROS, group=PRODUCT_NC, color=PRODUCT_NC)) + geom_line() + ggtitle("Import"))
   #   
   # })
-  output$comext_import <- renderPlot(ggplot(df2_import, aes(x=MONTH, y=VALUE_IN_EUROS, group=PRODUCT_NC, color=PRODUCT_NC)) + geom_line() + ggtitle("Import"))
+  output$comext_import <- renderPlot({
+    product <- input$product
+    product_list <- c()
+    for (p in product){
+      sub_products <- ld[startsWith(ld$HS6_str, p)]$HS6_str
+      product_list <- append(product_list, sub_products)
+    }
+    sel_p <- if (is.null(product)) TRUE else comext_2010$hs6 %in% product_list
+ 
+    countries <- input$country
+    #print(itgs$origin_eu)
+    sel <- if (is.null(countries) | "<ALL>" %in% countries) TRUE else 
+      comext_2010$DECLARANT_ISO %in% countries
+    
+    cm <- comext_2010[sel]
+    cm <- cm[, .(value = as.numeric(sum(VALUE_IN_EUROS))), by = .(MONTH, DECLARANT_ISO, FLOW)]
+
+
+    ggplot(cm, 
+      aes(x=MONTH, y=value, color = as.factor(FLOW))) + 
+      facet_wrap(~DECLARANT_ISO)+
+      geom_line() + ggtitle("COMEXT")
+
+    
+  })
+    
+    
+    
+  # ggplot(df2_import, aes(x=MONTH, y=VALUE_IN_EUROS, group=PRODUCT_NC, color=PRODUCT_NC)) + geom_line() + ggtitle("Import"))
   # 
   # 
   # output$comext_import <- reactive({
@@ -280,7 +312,7 @@ server <- function(input, output, session) {
   #   # renderPlot(ggplot(comext_export, aes(x=MONTH, y=VALUE_IN_EUROS, group=PRODUCT_NC, color=PRODUCT_NC)) + geom_line() + ggtitle("Export"))
   #   renderPlot(ggplot(df2_export, aes(x=MONTH, y=VALUE_IN_EUROS, group=PRODUCT_NC, color=PRODUCT_NC)) + geom_line() + ggtitle("Export"))
   # })
-  output$comext_export <- renderPlot(ggplot(df2_export, aes(x=MONTH, y=VALUE_IN_EUROS, group=PRODUCT_NC, color=PRODUCT_NC)) + geom_line() + ggtitle("Export"))
+  #output$comext_export <- renderPlot(ggplot(df2_export, aes(x=MONTH, y=VALUE_IN_EUROS, group=PRODUCT_NC, color=PRODUCT_NC)) + geom_line() + ggtitle("Export"))
   # data_import <- reactive({
   #   countries <- input$country
   #   product <- input$product

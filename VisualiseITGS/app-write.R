@@ -5,6 +5,7 @@ library(fst)
 library(igraph)
 library(countrycode)
 library(networkD3)
+library(feather)
 
 #dir_itgs <- "../../itgs"
 dir_itgs <- "~/data"
@@ -12,7 +13,7 @@ dir_itgs <- "~/data"
 # PREPARE DATA ------------------------------------------------------------
 
 # Read and prep the coordinates of the countries
-centroids <- fread("../hulpdata/geo_europa/europe_nuts0_centroids.csv",
+centroids <- fread("~/EU_BD_hackathon_2021/hulpdata/geo_europa/europe_nuts0_centroids.csv",
   stringsAsFactors = FALSE)
 # Add continents
 centroids <- rbind(centroids, data.frame(
@@ -26,18 +27,54 @@ centroids$nuts_id[centroids$nuts_id == "UK"] <- "GB"
 centroids$nuts_id[centroids$nuts_id == "EL"] <- "GR"
 
 # Read ITGS
-itgs <- fread(file.path(dir_itgs, "itgs_reference_2019_short.csv"))
-setnames(itgs, tolower(names(itgs)))
-# Combine non-eu countries into continents
-codes <- unique(unique(itgs$destin), unique(itgs$origin) )
-codes_eu <- codes[unique(codes) %in% centroids$nuts_id]
-itgs[, origin_eu := ifelse(origin %in% codes_eu, origin, 
-  countrycode(origin, origin="iso2c", destination = 'continent'))]
-itgs[, destin_eu := ifelse(destin %in% codes_eu, destin, 
-  countrycode(destin, origin="iso2c", destination = 'continent'))]
-itgs[, consign_eu := ifelse(consign %in% codes_eu, consign, 
-  countrycode(consign, origin="iso2c", destination = 'continent'))]
+years <- c("2017","2018", "2019")
 
+#itgs_list <- vector(mode="list", length=length(years))
+#names(itgs_list) <- years
+
+#goods <- vector(mode="list", length=length(years))
+#names(goods) <- years
+
+#countries <- vector(mode="list", length=length(years))
+#names(countries) <- years
+
+unique_goods = c()
+unique_countries = c()
+#unique_codes_eu = c()
+
+for (year in years) {
+  file_name <- paste("itgs_reference_", year, "_short.csv", sep="")
+  print(file_name)
+  itgs <- fread(file.path(dir_itgs, file_name))
+  setnames(itgs, tolower(names(itgs)))
+  # Combine non-eu countries into continents
+  codes <- unique(unique(itgs$destin), unique(itgs$origin) )
+  codes_eu <- codes[unique(codes) %in% centroids$nuts_id]
+  itgs[, origin_eu := ifelse(origin %in% codes_eu, origin, 
+                             countrycode(origin, origin="iso2c", destination = 'continent'))]
+  itgs[, destin_eu := ifelse(destin %in% codes_eu, destin, 
+                             countrycode(destin, origin="iso2c", destination = 'continent'))]
+  itgs[, consign_eu := ifelse(consign %in% codes_eu, consign, 
+                              countrycode(consign, origin="iso2c", destination = 'continent'))]
+  
+  goods <- unique(itgs$hs6)
+  noneu <- c("Asia", "Americas", "Africa", "Europe", "Oceania")
+  countries <- unique(itgs$origin_eu)
+  countries <- c("<ALL>", countries)
+  countries <- setdiff(countries, noneu)
+  
+  unique_goods <- unique(append(unique_goods, goods))
+  unique_countries <- unique(append(unique_countries, countries))
+  #unique_codes_eu <- unique(append(unique_codes_eu, codes_eu))
+  
+  #feather_file_name <- paste("itgs_", year, ".feather", sep="")
+  itgs_file_name <- paste("itgs_", year, ".Rdata", sep="")
+
+  #write_feather(itgs, feather_file_name)
+  save(itgs, file=itgs_file_name)
+}
+
+#unique_countries
 
 coords <- as.matrix(centroids[, c("x", "y")])
 coords[,1] <- coords[,1] - min(coords[,1])
@@ -46,156 +83,16 @@ m <- max(coords)
 coords[,1] <- coords[,1]/m
 coords[,2] <- coords[,2]/m
 
-goods <- unique(itgs$hs6)
-noneu <- c("Asia", "Americas", "Africa", "Europe", "Oceania")
-countries <- unique(itgs$origin_eu)
-countries <- c("<ALL>", countries)
-countries <- setdiff(countries, noneu)
+save(years, file="years.Rdata")
+save(centroids, file="centroids.Rdata")
+save(coords, file="coords.Rdata")
+save(unique_goods, file="unique_goods.Rdata")
+save(unique_countries, file="unique_countries.Rdata")
+#save(unique_codes_eu, file="unique_codes_eu.Rdata")
 
 
-
-
-
-# UI ----------------------------------------------------------------------
-
-
-ui <- fluidPage(
-
-  titlePanel("ITGS"),
-
-  # Sidebar with a slider input for number of bins 
-  sidebarLayout(
-    sidebarPanel(
-      # Client side filtering in selectize
-      #selectizeInput("product", "Good/service", choices = goods, 
-      #  selected = NULL, multiple = FALSE, options = NULL),
-      # Server side filtering in selectize
-      selectizeInput("product", "Good/service", choices = NULL, 
-        selected = NULL, multiple = FALSE, options = NULL),
-      selectizeInput("country", "Country", choices = countries, 
-        selected = NULL, multiple = TRUE, options = NULL),
-      actionButton("update", "Update"),
-    ),
-
-    # Show a plot of the generated distribution
-    mainPanel(
-      plotOutput("network", height = "800px"),
-      sankeyNetworkOutput("alluvial", height = "800px")
-    )
-  )
-)
-
-
-
-
-
-
-# SERVER ------------------------------------------------------------------
-
-
-
-server <- function(input, output, session) {
-  
-  updateSelectizeInput(session, 'product', choices = goods, server = TRUE)
-  
-  filter_country <- reactive({
-    countries <- input$country
-    sel <- if (is.null(countries) | "<ALL>" %in% countries) TRUE else 
-      itgs$origin_eu %in% countries | itgs$consign_eu %in% countries |
-      itgs$destin_eu %in% countries
-    flow <- itgs[sel == TRUE]
-    # Remove flow between non eu
-    noneu <- c("Asia", "Americas", "Africa", "Europe", "Oceania")
-    flow <- flow[!(origin_eu %in% noneu & consign_eu %in% noneu & 
-        destin_eu %in% noneu)]
-    flow
-  })
-  
-  # filter_product <- reactive({
-  #   flow <- filter_country()
-  #   product <- input$product
-  #   if (is.null(product)) {
-  #     flow[, .(value = sum(obs_value)),
-  #       by = .(origin_eu, consign_eu, destin_eu)]
-  #   } else {
-  #     flow[hs6 == product, .(value = sum(obs_value)),
-  #       by = .(origin_eu, consign_eu, destin_eu)]
-  #   }
-  # })
-  
-  filter_product <- eventReactive(input$update, {
-    flow <- filter_country()
-    product <- input$product
-    if (is.null(product)) {
-      flow[, .(value = sum(obs_value)),
-        by = .(origin_eu, consign_eu, destin_eu)]
-    } else {
-      flow[hs6 == product, .(value = sum(obs_value)),
-        by = .(origin_eu, consign_eu, destin_eu)]
-    }
-  })
-  
-  network <- reactive({
-    flow <- filter_product()
-    flow <- flow[, .(weight = sum(value)), by = .(origin_eu, destin_eu)]
-    flow <- flow[complete.cases(flow)]
-    setnames(flow, c("src", "dst", "weight"))
-    flow <- flow[!(src %in% noneu | dst %in% noneu)]
-    flow
-  })
-  
-  
-  
-  output$network <- renderPlot({
-    # Plot network
-    dta <- network()
-    g <- graph_from_data_frame(dta, directed = TRUE, vertices = centroids)
-    par(mar = c(0,0,0,0), bg = "#555555")
-    plot(centroids$x, centroids$y, asp = 1, type = 'n', xlab = "", ylab = "", 
-      xaxt = 'n', yaxt = 'n', bty = 'n')
-    plot(g, coords = coords, rescale = FALSE, 
-      add = TRUE, edge.width = 25*(E(g)$weight/max(E(g)$weight)), 
-      edge.color = "#FFFFFF50", edge.arrow.size = 0.2,
-      vertex.label.color = "magenta", vertex.color = "lightblue",
-      edge.curved = TRUE)
-  })
-  
-  output$alluvial <- renderSankeyNetwork({
-    flow <- filter_product()
-    print(flow)
-    # Filter out small flows
-    flow <- flow[order(-value)]
-    flow <- flow[(cumsum(value)/sum(value)) < 0.8]
-    # Build network for alluvial diagram
-    nodes <- data.table(
-      id = c(unique(paste0(flow$destin_eu, "_d")),
-        unique(paste0(flow$consign_eu, "_c")),
-        unique(flow$origin_eu)), stringsAsFactors = FALSE)
-    links <- rbind(flow[, .(
-      src = origin_eu,
-      dst = paste0(consign_eu, "_c"),
-      value = value,
-      group = origin_eu)],
-      flow[, .(
-      src = paste0(consign_eu, "_c"),
-      dst = paste0(destin_eu, "_d"),
-      value = value,
-      group = origin_eu)])
-    links <- links[, .(value = sum(value)), by = .(src, dst, group)]
-    nodes <- nodes[id %in% links$src | id %in% links$dst]
-    links[, src := match(src, nodes$id)-1L]
-    links[, dst := match(dst, nodes$id)-1L]
-    sankeyNetwork(links, Source = "src", Target = "dst", Value = "value",
-      Nodes = nodes, NodeID = "id", LinkGroup = "group")
-  })
-
-}
-
-
-
-
-
-# RUN APP -----------------------------------------------------------------
-
-
-shinyApp(ui = ui, server = server)
+#goods <- unique(itgs$hs6)
+#noneu <- c("Asia", "Americas", "Africa", "Europe", "Oceania")
+#countries <- unique(itgs$origin_eu)
+#countries <- c("<ALL>", countries)
+#countries <- setdiff(countries, noneu)

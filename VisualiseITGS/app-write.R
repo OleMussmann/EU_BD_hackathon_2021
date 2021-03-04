@@ -77,11 +77,11 @@ for (year in years) {
 #unique_countries
 
 coords <- as.matrix(centroids[, c("x", "y")])
-coords[,1] <- coords[,1] - min(coords[,1])
-coords[,2] <- coords[,2] - min(coords[,2])
-m <- max(coords)
-coords[,1] <- coords[,1]/m
-coords[,2] <- coords[,2]/m
+#coords[,1] <- coords[,1] - min(coords[,1])
+#coords[,2] <- coords[,2] - min(coords[,2])
+#m <- max(coords)
+#coords[,1] <- coords[,1]/m
+#coords[,2] <- coords[,2]/m
 
 save(years, file="years.Rdata")
 save(centroids, file="centroids.Rdata")
